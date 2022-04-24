@@ -148,9 +148,47 @@ const motrarImagen = async(req, res = response) => {
     return res.sendFile(path.join(__dirname,'../assets/no-image.jpg'));
 }
 
+const motrarImagenCloudinar = async(req, res = response) => {
+    const {id, coleccion} = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+
+        case 'usuarios':
+            modelo = await Usuario.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id ${id}`
+                })
+            }
+            break;
+
+        case 'productos':
+            modelo = await Producto.findById(id);
+            if (!modelo) {
+                return res.status(400).json({
+                    msg: `No existe un producto con el id ${id}`
+                })
+            }
+            break;
+
+        default:
+            return res.status(500).json({msg: 'se me olvido validar esto'});
+
+    }
+    //  Valir img
+        if (modelo.img){
+            const pathImagen = path.join(modelo.img);
+            return res.send(pathImagen);
+        }
+    return res.sendFile(path.join(__dirname,'../assets/no-image.jpg'));
+}
+
 module.exports = {
     cargarArchivo,
     actualizarImagen,
     motrarImagen,
-    actualizarImagenCloudinary
+    actualizarImagenCloudinary,
+    motrarImagenCloudinar
 }
