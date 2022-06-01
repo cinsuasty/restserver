@@ -15,7 +15,6 @@ const { validarCampos,
 const { usuariosGet, 
         usuariosPost, 
         usuariosPut, 
-        usuariosPatch, 
         usuariosDelete } = require('../controllers/usuarios');
 const { esRolValido, 
         emailExiste,
@@ -42,8 +41,6 @@ router.post('/', [
         check('rol').custom(esRolValido),
         validarCampos
 ],usuariosPost);
-
-router.patch('/',usuariosPatch);
 
 router.delete('/:id',[
         validarJWT,
