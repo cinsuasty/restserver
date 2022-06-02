@@ -8,15 +8,20 @@ const usuariosGet = async(req = request, res = response) => {
     const { limite = 5, desde = 0} = req.query;
     const query = {estado: true};
 
-    const [total,usuarios] = await Promise.all([
+    const [total,usuarios, aggregate] = await Promise.all([
         Usuario.countDocuments(query),
         Usuario.find(query)
             .skip(Number(desde))
-            .limit(Number(limite))
+            .limit(Number(limite)),
+        Usuario.aggregate([
+            { $group: {_id: '$rol', total: {$sum: 1}} },
+        ]),
+        
     ]);
     res.json({
         total,
-        usuarios
+        usuarios,
+        aggregate
     })
 }
 // Crear usuario

@@ -31,8 +31,8 @@ const UsuarioShema = Schema({
     google: {
         type: Boolean,
         default: false
-    }
-})
+    },
+}, { timestamps: true })
 
 UsuarioShema.methods.toJSON = function (){
     const { __v, password, _id,...usuario } = this.toObject();
